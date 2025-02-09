@@ -54,14 +54,14 @@ void Piece::getMoves(set <Move> & movesSet, const Board & board) const
 
             if (board[possibleMove].getType() == SPACE)
             {
-                moves.insert(Move(position, possibleMove, isWhite()));
+                movesSet.insert(Move(position, possibleMove, isWhite()));
             }
             else
             {
                 // If the piece is enemy, capture it, then stop sliding
                 if (board[possibleMove].isWhite() != this->isWhite())
                 {
-                    moves.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
+                    movesSet.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
                 }
                 break; // Stop at first piece
             }

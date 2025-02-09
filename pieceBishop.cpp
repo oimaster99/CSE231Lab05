@@ -30,7 +30,7 @@ set<Move> Bishop::getMoves(set <Move>& moves, const Board& board) const
     {
        {-1, 1}, {1, 1}, {-1, -1}, {1, -1},
     };
-    for (int i = 0; i < 8; i++) 
+    for (int i = 0; i < 4; i++)
     {
         int r = position.getRow() + movement[i].row;
         int c = position.getCol() + movement[i].col;
@@ -42,14 +42,14 @@ set<Move> Bishop::getMoves(set <Move>& moves, const Board& board) const
             //move.setSource(getPosition());
             //move.setDest(possibleMove);
             //move.setIsWhite(isWhite());
-            
+
             // adjust the position we're moving to
-            r = position.getRow() + movement[i].row;
-            c = position.getCol() + movement[i].col;
+            r += movement[i].row;
+            c += movement[i].col;
             possibleMove = Position(c, r);
         }
 
-        if (possibleMove.isValid()) 
+        if (possibleMove.isValid())
         {
             if (board[possibleMove].getType() == SPACE)
             {
@@ -58,7 +58,8 @@ set<Move> Bishop::getMoves(set <Move>& moves, const Board& board) const
             else if (board[possibleMove].isWhite() != this->isWhite())
             {
                 moves.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
-            };
+            }
         }
     }
+    return moves;
 }

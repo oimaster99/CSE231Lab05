@@ -59,13 +59,13 @@ public:
    
    // constructors and stuff
    Piece() : position(Position(0, 0)), fWhite(true), nMoves(0), lastMove(0) {} //Default Constructor
-   Piece(const Position & pos, bool isWhite = true)   {}
-   Piece(int c, int r, bool isWhite = true)           
+   Piece(const Position& pos, bool isWhite = true) : position(pos), fWhite(isWhite), nMoves(0), lastMove(0) {}
+   Piece(int c, int r, bool isWhite = true) : position(Position(c, r)), fWhite(isWhite), nMoves(0), lastMove(0)
    {
        position = Position(c, r);
        fWhite = isWhite;
    }
-   Piece(const Piece & piece)                         {}
+   Piece(const Piece& piece) : fWhite(piece.fWhite), nMoves(piece.nMoves), lastMove(piece.lastMove), position(piece.position) {}
    virtual ~Piece()                                   {}
    virtual const Piece& operator = (const Piece& rhs);
 
@@ -98,6 +98,7 @@ protected:
    bool fWhite;                    // which team are you on?
    Position position;              // current position of this piece
    int  lastMove;                  // last time this piece moved
+   ColRowP movement[8];
 };
 
 

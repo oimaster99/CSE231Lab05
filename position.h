@@ -222,7 +222,8 @@ public:
     }
 
 private:
-    void set(uint8_t colRowNew) const { colRow == colRowNew; }
+    void set(uint8_t colRowNew) { colRow = colRowNew; }
+
 
     uint8_t colRow;
     static double squareWidth;

@@ -26,13 +26,77 @@ void Pawn::display(ogstream* pgout) const
  *********************************************/
 set<Move> Pawn::getMoves(const Board& board) const
 {
-    Delta movement[] =
-    {
-       {-1, 2}, {1, 2}, {-1, -2}, {1, -2},
-       {-2, 1}, {2, 1}, {-2, -1}, {2, -1}
-    };
+    set<Move> moves;
+    Position movement(getPosition(), isWhite() ? Delta({ 1, 0 }) : Delta({ -1, 0 }));
 
-    return getMoveCalc(movement, sizeof(movement) / sizeof(movement[0]), board);
+    if (movement.isValid() && board[movement].getType() == SPACE)
+    {
+        Move move;
+        move.setSource(getPosition());
+        move.setDest(movement);
+        move.setIsWhite(isWhite());
+
+        if (movement.getRow() == (isWhite() ? 7 : 0))
+        {
+            move.setPromotion(QUEEN);
+        }
+        moves.insert(move);
+    }
+
+    if (!isMoved())
+    {
+        Position posMove(isWhite() ? 3 : 4, getPosition().getCol());
+        Position posCheck(isWhite() ? 2 : 5, getPosition().getCol());
+
+        if (board[posMove].getType() == SPACE && board[posCheck].getType() == SPACE)
+        {
+            Move move;
+            move.setSource(getPosition());
+            move.setDest(posMove);
+            move.setIsWhite(isWhite());
+            moves.insert(move);
+        }
+    }
+
+    int values[2] = { -1, 1 };
+
+    for (auto i : values)
+    {
+        Position posMove(position.getRow() + (isWhite() ? 1 : -1), position.getCol() + i);
+        if (posMove.isValid() && board[posMove].getType() != SPACE && board[posMove].isWhite() != isWhite())
+        {
+            Move move;
+            move.setSource(getPosition());
+            move.setDest(posMove);
+            move.setIsWhite(isWhite());
+            move.setCapture(board[posMove].getType());
+            if (posMove.getRow() == 7 || posMove.getRow() == 0)
+            {
+                move.setPromotion(QUEEN);
+            }
+            moves.insert(move);
+        }
+    }
+
+    for (auto i : values)
+    {
+        Position positionMove(position.getRow() + (isWhite() ? 1 : -1), position.getCol() + i);
+        Position positionKill(position.getRow(), position.getCol() + i);
+
+        if (positionMove.isValid() && (position.getRow() == (isWhite() ? 4 : 3)) && board[positionMove].getType() == SPACE &&
+            board[positionKill].getType() == PAWN && board[positionKill].isWhite() != isWhite() &&
+            board[positionKill].getNMoves() == 1 && board[positionKill].justMoved(board.getCurrentMove()))
+        {
+            Move move;
+            move.setSource(getPosition());
+            move.setDest(positionMove);
+            move.setIsWhite(isWhite());
+            move.setCapture(board[positionKill].getType());
+            move.setEnPassant();
+            moves.insert(move);
+        }
+    }
+    return moves;
     /*for (int i = 0; i < 8; i++)
     {
         int r = position.getRow() + movement[i].dRow;

@@ -23,14 +23,14 @@ class TestBoard;
 class Move
 {
 public:
-    enum MoveType { MOVE, ENPASSANT, CASTLE_KING, CASTLE_QUEEN, MOVE_ERROR, PROMOTION };
+    enum MoveType { MOVE, ENPASSANT, CASTLE_KING, CASTLE_QUEEN, MOVE_ERROR };
 
     friend TestMove;
     friend TestBoard;
 
 
     // Constructor
-    Move();
+    Move() : promote(SPACE), capture(SPACE), isWhite(true) { }
 
     Move(const Move& rhs) : promote(SPACE), capture(SPACE), isWhite(true), moveType(MOVE)
     {

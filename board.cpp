@@ -70,7 +70,12 @@ Piece& Board::operator [] (const Position& pos)
  ***********************************************/
 void Board::display(const Position & posHover, const Position & posSelect) const
 {
-   
+    pgout->drawBoard();
+    pgout->drawHover(posHover.getLocation());
+
+/*    for (int r = 0; r < 8; r++)
+        for (int c = 0; c < 8; c++)
+            board[r][c]->display(pgout);*/
 }
 
 

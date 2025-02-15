@@ -34,7 +34,25 @@
   **************************************/
 void TestPawn::getMoves_simpleWhite()
 {
-   assertUnit(NOT_YET_IMPLEMENTED);
+	// SETUP
+	BoardEmpty board;
+
+	Pawn pawn(7, 7, false);
+	pawn.fWhite = true;
+	pawn.position.set(1, 3);
+	board.board[1][3] = &pawn;
+
+	set<Move> moves;
+
+	set<Position> expectedMoves = {
+		{1, 4}
+	};
+
+	// EXERCISE
+	moves = pawn.getMoves(board);
+
+	// VERIFY
+	assertUnit(moves.size() == expectedMoves.size());
 }
 
 /*************************************

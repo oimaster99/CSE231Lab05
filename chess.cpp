@@ -32,7 +32,14 @@ void callBack(Interface *pUI, void * p)
 {
    // the first step is to cast the void pointer into a game object. This
    // is the first step of every single callback function in OpenGL. 
-   Board * pBoard = (Board *)p;  
+   Board * pBoard = (Board *)p;
+   
+   Position selectPos = Position(pUI->getSelectPosition());
+   Position hoverPos = Position(pUI->getHoverPosition());
+   Position previousPos = Position(pUI->getPreviousPosition());
+
+   pBoard->display(hoverPos, selectPos);
+
 }
 
 

@@ -22,6 +22,6 @@ public:
    Queen(int c, int r, bool isWhite) : Piece(c, r, isWhite) { }
    ~Queen() {                }
    PieceType getType()            const { return QUEEN; }
-   void getMoves(set <Move>& moves, const Board& board) const;
+   set<Move> getMoves(const Board& board) const;
    void display(ogstream* pgout)  const;
 };

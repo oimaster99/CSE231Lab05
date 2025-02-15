@@ -22,6 +22,6 @@ public:
    King(int c, int r, bool isWhite) : Piece(c, r, isWhite) { }
    ~King() {                }
    PieceType getType()            const { return KING; }
-   void getMoves(set <Move>& moves, const Board& board) const;
+   set<Move> getMoves(const Board& board) const;
    void display(ogstream* pgout)  const;
 };

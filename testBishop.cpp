@@ -50,7 +50,7 @@ void TestBishop::getMoves_blocked()
 	set <Move> moves;
 
 	// EXERCISE
-	bishop.getMoves(moves, board);
+	moves = bishop.getMoves(board);
 
 	// VERIFY
 	assertUnit(moves.size() == 0);
@@ -82,7 +82,11 @@ void TestBishop::getMoves_slideToEnd()
     // SETUP
 	BoardEmpty board;
 
-	Bishop bishop(Position(2, 1), true);
+	Bishop bishop(7, 7, false);
+	bishop.fWhite = true;
+	bishop.position.set(2, 1);
+	board.board[2][1] = &bishop;
+
 	set<Move> moves;
 
 	set<Position> expectedMoves = {
@@ -92,7 +96,7 @@ void TestBishop::getMoves_slideToEnd()
 	};
 
 	// EXERCISE
-	bishop.getMoves(moves, board);
+	moves = bishop.getMoves(board);
 
 	// VERIFY
 	assertUnit(moves.size() == expectedMoves.size());
@@ -115,7 +119,33 @@ void TestBishop::getMoves_slideToEnd()
  **************************************/
 void TestBishop::getMoves_slideToBlock()
 {
-   assertUnit(NOT_YET_IMPLEMENTED);
+	// SETUP
+	BoardEmpty board;
+
+	Bishop bishop(7, 7, false);
+	bishop.fWhite = true;
+	bishop.position.set(2, 1);
+	board.board[2][1] = &bishop;
+	White white0(PAWN);
+	board.board[1][0] = &white0;
+	White white1(PAWN);
+	board.board[3][0] = &white1;
+	White white2(PAWN);
+	board.board[0][3] = &white2;
+	White white3(PAWN);
+	board.board[7][6] = &white3;
+
+	set<Move> moves;
+
+	set<Position> expectedMoves = {
+		{1, 2}, {3, 2}, {4, 3}, {5, 4}, {6, 5}
+	};
+
+	// EXERCISE
+	moves = bishop.getMoves(board);
+
+	// VERIFY
+	assertUnit(moves.size() == expectedMoves.size());
 }
 
 
@@ -135,7 +165,35 @@ void TestBishop::getMoves_slideToBlock()
  **************************************/
 void TestBishop::getMoves_slideToCapture()
 {
-   assertUnit(NOT_YET_IMPLEMENTED);
+	// SETUP
+	BoardEmpty board;
+
+	Bishop bishop(7, 7, false);
+	bishop.fWhite = true;
+	bishop.position.set(2, 1);
+	board.board[2][1] = &bishop;
+	Black black0(PAWN);
+	board.board[1][0] = &black0;
+	Black black1(PAWN);
+	board.board[3][0] = &black1;
+	Black black2(PAWN);
+	board.board[0][3] = &black2;
+	Black black3(PAWN);
+	board.board[7][6] = &black3;
+
+	set<Move> moves;
+
+	set<Position> expectedMoves = {
+		{0, 3},
+		{1, 2}, {3, 2}, {4, 3}, {5, 4}, {6, 5}, {7, 6},
+		{1, 0}, {3, 0}
+	};
+
+	// EXERCISE
+	moves = bishop.getMoves(board);
+
+	// VERIFY
+	assertUnit(moves.size() == expectedMoves.size());
 }
 
 

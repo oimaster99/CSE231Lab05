@@ -60,7 +60,7 @@ public:
 protected:
    void  assertBoard();
 
-   Piece * board[8][8];    // the board of chess pieces
+   Piece* board[8][8];    // the board of chess pieces
    int numMoves;
 
    ogstream* pgout;

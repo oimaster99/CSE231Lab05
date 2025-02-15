@@ -22,6 +22,6 @@ public:
    Rook(int c, int r, bool isWhite) : Piece(c, r, isWhite) { }
    ~Rook() {                }
    PieceType getType()            const { return ROOK; }
-   void getMoves(set <Move>& moves, const Board& board) const;
+   set<Move> getMoves(const Board& board) const;
    void display(ogstream* pgout)  const;
 };

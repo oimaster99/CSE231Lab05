@@ -17,24 +17,27 @@
  ***************************************************/
 void Rook::display(ogstream* pgout) const
 {
-
+    pgout->drawRook(position.getLocation(), !fWhite);
 }
 
 
 /**********************************************
- * KNIGHT : GET POSITIONS
+ * ROOK : GET POSITIONS
  *********************************************/
-void Rook::getMoves(set <Move>& moves, const Board& board) const
+set<Move> Rook::getMoves(const Board& board) const
 {
-    ColRowP movement[] =
+    Delta movement[] =
     {
        {-1, 0 }, {1, 0},
       {0, -1 }, {0, 1}
     };
-    for (int i = 0; i < 8; i++) 
+
+    return getMoveSlideCalc(movement, sizeof(movement) / sizeof(movement[0]), board);
+
+    /*for (int i = 0; i < 8; i++)
     {
-        int r = position.getRow() + movement[i].row;
-        int c = position.getCol() + movement[i].col;
+        int r = position.getRow() + movement[i].dRow;
+        int c = position.getCol() + movement[i].dCol;
         Position possibleMove = Position(c, r);
 
         if (possibleMove.isValid()) 
@@ -48,5 +51,5 @@ void Rook::getMoves(set <Move>& moves, const Board& board) const
                 moves.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
             };
         }
-    }
+    }*/
 }

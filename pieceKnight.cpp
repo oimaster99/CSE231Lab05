@@ -17,21 +17,23 @@
  ***************************************************/
 void Knight::display(ogstream* pgout) const
 {
-
+    pgout->drawKnight(position.getLocation(), !fWhite);
 }
 
 
 /**********************************************
  * KNIGHT : GET POSITIONS
  *********************************************/
-void Knight::getMoves(set <Move>& moves, const Board& board) const
+set<Move> Knight::getMoves(set <Move>& moves, const Board& board) const
 {
-    ColRowP movement[] =
+    Delta movement[] =
     {
-       {-1, 2, 1}, {1, 2, 1}, {-1, -2, 1}, {1, -2, 1},
-       {-2, 1, 1}, {2, 1, 1}, {-2, -1, 1}, {2, -1, 1}
+       {-1, 2}, {1, 2}, {-1, -2}, {1, -2},
+       {-2, 1}, {2, 1}, {-2, -1}, {2, -1}
     };
-    for (int i = 0; i < sizeof(movement) / sizeof(movement[0]); i++) 
+
+    return getMoveCalc(movement, sizeof(movement) / sizeof(movement[0]), board);
+   /* for (int i = 0; i < sizeof(movement) / sizeof(movement[0]); i++)
     {
         int r = position.getRow();
         int c = position.getCol();
@@ -64,7 +66,7 @@ void Knight::getMoves(set <Move>& moves, const Board& board) const
 
             // If it's a jumping piece (like a knight), stop after one move
             if (movement[i].maxSteps == 1)
-                break;
+                break;*/
 
 
         /*if (possibleMove.isValid())
@@ -77,6 +79,6 @@ void Knight::getMoves(set <Move>& moves, const Board& board) const
             {
                 moves.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
             };*/
-        }
-    }
+     //   }
+   // }
 }

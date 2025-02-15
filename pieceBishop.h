@@ -22,6 +22,6 @@ public:
    Bishop(int c, int r, bool isWhite) : Piece(c, r, isWhite) { }
    ~Bishop() {                }
    PieceType getType()            const { return BISHOP; }
-   set<Move> getMoves(set <Move>& moves, const Board& board) const;
+   set<Move> getMoves(const Board& board) const;
    void display(ogstream* pgout)  const;
 };

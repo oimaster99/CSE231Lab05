@@ -17,24 +17,26 @@
  ***************************************************/
 void Pawn::display(ogstream* pgout) const
 {
-
+    pgout->drawPawn(position.getLocation(), !fWhite);
 }
 
 
 /**********************************************
  * KNIGHT : GET POSITIONS
  *********************************************/
-void Pawn::getMoves(set <Move>& moves, const Board& board) const
+set<Move> Pawn::getMoves(const Board& board) const
 {
-    ColRowP movement[] =
+    Delta movement[] =
     {
        {-1, 2}, {1, 2}, {-1, -2}, {1, -2},
        {-2, 1}, {2, 1}, {-2, -1}, {2, -1}
     };
-    for (int i = 0; i < 8; i++) 
+
+    return getMoveCalc(movement, sizeof(movement) / sizeof(movement[0]), board);
+    /*for (int i = 0; i < 8; i++)
     {
-        int r = position.getRow() + movement[i].row;
-        int c = position.getCol() + movement[i].col;
+        int r = position.getRow() + movement[i].dRow;
+        int c = position.getCol() + movement[i].dCol;
         Position possibleMove = Position(c, r);
 
         if (possibleMove.isValid()) 
@@ -48,5 +50,5 @@ void Pawn::getMoves(set <Move>& moves, const Board& board) const
                 moves.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
             };
         }
-    }
+    }*/
 }

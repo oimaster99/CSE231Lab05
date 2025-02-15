@@ -17,24 +17,47 @@
  ***************************************************/
 void King::display(ogstream* pgout) const
 {
-
+    pgout->drawKing(position.getLocation(), !fWhite);
 }
 
 
 /**********************************************
  * KNIGHT : GET POSITIONS
  *********************************************/
-void King::getMoves(set <Move>& moves, const Board& board) const
+set<Move> King::getMoves(const Board& board) const
 {
-    ColRowP movement[] =
+    Delta movement[] =
     {
-       {-1, 2}, {1, 2}, {-1, -2}, {1, -2},
-       {-2, 1}, {2, 1}, {-2, -1}, {2, -1}
+      {-1, 1 }, {0, 1 }, {1, 1 },
+      {-1, 0 }, {1, 0 },
+      {-1, -1}, {0, -1}, {1, -1}
     };
-    for (int i = 0; i < 8; i++) 
+
+    set<Move> moves = getMoveCalc(movement, sizeof(movement) / sizeof(movement[0]), board);
+
+    //King CASTLE move
+    if (!isMoved) 
     {
-        int r = position.getRow() + movement[i].row;
-        int c = position.getCol() + movement[i].col;
+        Position positionSpace(position.getRow(), 5);
+        Position positionMove(position.getRow(), 6);
+        Position positionRook(position.getRow(), 7);
+
+        if ((board[positionMove].getType() == SPACE && board[positionSpace].getType() == SPACE)
+            && (board[positionRook].isMoved() == false && board[positionRook].getType() == ROOK))
+        {
+            Move move;
+            move.setSource(getPosition());
+            move.setDest(positionMove);
+            move.setIsWhite(isWhite());
+            move.setCastle(true);
+            moves.insert(move);
+        }
+    }
+
+    /*for (int i = 0; i < 8; i++)
+    {
+        int r = position.getRow() + movement[i].dRow;
+        int c = position.getCol() + movement[i].dCol;
         Position possibleMove = Position(c, r);
 
         if (possibleMove.isValid()) 
@@ -48,5 +71,5 @@ void King::getMoves(set <Move>& moves, const Board& board) const
                 moves.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
             };
         }
-    }
+    }*/
 }

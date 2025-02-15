@@ -34,38 +34,64 @@ const Piece & Piece::operator = (const Piece & rhs)
  * PIECE : GET MOVES
  * Iterate through the moves decorator to allow a piece to move
  ***********************************************/
-void Piece::getMoves(set <Move> & movesSet, const Board & board) const
+set<Move> Piece::getMoveCalc(Delta movement[], int numMoves, const Board& board) const
 {
-    for (int i = 0; i < sizeof(movement) / sizeof(movement[0]); i++)
+    set<Move> moves;
+
+    for (int i = 0; i < numMoves; i++)
     {
-        int r = position.getRow();
-        int c = position.getCol();
-        int steps = 0;
+        Position possibleMove(position, movement[i]);
+
+        if (possibleMove.isValid())
+        {
+            if (board[possibleMove].isWhite() != isWhite() || board[possibleMove].getType() == SPACE)
+            {
+                Move move;
+                move.setSource(getPosition());
+                move.setDest(possibleMove);
+                move.setIsWhite(isWhite());
+                if (board[possibleMove].getType() != SPACE)
+                {
+                    move.setCapture(board[possibleMove].getType());
+                }
+                moves.insert(move);
+            }
+        }
+    }
+    return moves;
 
         // Keep sliding until we reach maxSteps (1 for jumps, higher for sliders)
-        while (steps < movement[i].maxSteps)
+       /* while (steps < movement[i].maxSteps)
         {
-            r += movement[i].row;
-            c += movement[i].col;
-            Position possibleMove = Position(c, r);
+            
 
             if (!possibleMove.isValid())
                 break; // Stop if out of bounds
 
-            if (board[possibleMove].getType() == SPACE)
+            if (board[possibleMove].isWhite() != isWhite() || board[possibleMove].getType() == SPACE)
             {
-                movesSet.insert(Move(position, possibleMove, isWhite()));
+                Move move;
+                move.setSource(getPosition());
+                move.setDest(possibleMove);
+                move.setIsWhite(isWhite());
+                if (board[possibleMove].getType() != SPACE) 
+                {
+                    move.setCapture(board[possibleMove].getType());
+                }
+                moves.insert(move);
             }
             else
             {
                 // If the piece is enemy, capture it, then stop sliding
                 if (board[possibleMove].isWhite() != this->isWhite())
                 {
-                    movesSet.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
+                    moves.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
                 }
                 break; // Stop at first piece
             }
 
+            r += movement[i].row;
+            c += movement[i].col;
             steps++;
 
             // If it's a jumping piece (like a knight), stop after one move
@@ -73,5 +99,37 @@ void Piece::getMoves(set <Move> & movesSet, const Board & board) const
                 break;
         }
     }
+    return moves;*/
 }
 
+set<Move> Piece::getMoveSlideCalc(const Delta movement[], int numMoves, const Board& board) const 
+{
+    set<Move> moves;
+
+    for (int i = 0; i < numMoves; i++) 
+    {
+        Position possibleMove(position, movement[i]);
+
+        while (possibleMove.isValid() && board[possibleMove].getType() == SPACE) 
+        {
+            Move move;
+            move.setSource(getPosition());
+            move.setDest(possibleMove);
+            move.setIsWhite(isWhite());
+            moves.insert(move);
+
+            possibleMove = Position(possibleMove.getLocation(), movement[i]);
+        }
+
+        if (possibleMove.isValid() && board[possibleMove].isWhite() != fWhite && board[possibleMove].getType() != SPACE) 
+        {
+            Move move;
+            move.setSource(getPosition());
+            move.setDest(possibleMove);
+            move.setIsWhite(isWhite());
+            move.setCapture(board[position].getType());
+            moves.insert(move);
+        }
+    }
+    return moves;
+}

@@ -42,7 +42,7 @@ void TestKnight::getMoves_end()
    set <Move> moves;
 
    // EXERCISE
-   knight.getMoves(moves, board);
+   moves = knight.getMoves(moves, board);
 
    // VERIFY
    assertUnit(moves.size() == 2);  // many possible moves

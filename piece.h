@@ -50,22 +50,22 @@ public:
    friend TestPawn;
    friend TestBoard;
 
-   struct ColRowP 
+   /*struct ColRowP
    {
        int col;
        int row;
        int maxSteps;
-   };
+   };*/
    
    // constructors and stuff
    Piece() : position(Position(0, 0)), fWhite(true), nMoves(0), lastMove(0) {} //Default Constructor
-   Piece(const Position& pos, bool isWhite = true) : position(pos), fWhite(isWhite), nMoves(0), lastMove(0) {}
-   Piece(int c, int r, bool isWhite = true) : position(Position(c, r)), fWhite(isWhite), nMoves(0), lastMove(0)
+   Piece(const Position & pos, bool isWhite = true)   {}
+   Piece(int c, int r, bool isWhite = true)           
    {
        position = Position(c, r);
        fWhite = isWhite;
    }
-   Piece(const Piece& piece) : fWhite(piece.fWhite), nMoves(piece.nMoves), lastMove(piece.lastMove), position(piece.position) {}
+   Piece(const Piece & piece)                         {}
    virtual ~Piece()                                   {}
    virtual const Piece& operator = (const Piece& rhs);
 
@@ -86,11 +86,13 @@ public:
        lastMove = currentMove; 
        nMoves++;
    }
+   void setCastle() {}
 
    // overwritten by the various pieces
    virtual PieceType getType() const = 0;
    virtual void display(ogstream * pgout) const = 0;
-   void getMoves(set <Move> & moves, const Board & board) const;
+   set<Move> getMoveCalc(Delta mov[], int numMoves, const Board& board) const;
+   set<Move> getMoveSlideCalc(const Delta mov[], int numMoves, const Board& board) const;
 
 protected:
 
@@ -98,7 +100,6 @@ protected:
    bool fWhite;                    // which team are you on?
    Position position;              // current position of this piece
    int  lastMove;                  // last time this piece moved
-   ColRowP movement[8];
 };
 
 
@@ -227,7 +228,7 @@ public:
    White(PieceType pt) : PieceDummy(), pt(pt) {}
    bool isWhite() const { return true; }
    PieceType getType() const { return pt; }
-   void getMoves(set <Move>& moves, const Board& board) const { }
+   set<Move> getMoveCalc(set <Move>& moves, int numMoves, const Board& board) const { }
 };
 
 class Black : public PieceDummy

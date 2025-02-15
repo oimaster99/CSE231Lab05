@@ -35,8 +35,8 @@ set<Move> King::getMoves(const Board& board) const
 
     set<Move> moves = getMoveCalc(movement, sizeof(movement) / sizeof(movement[0]), board);
 
-    //King CASTLE move
-    if (!isMoved) 
+    //Kingside CASTLE move
+    if (!isMoved()) 
     {
         Position positionSpace(position.getRow(), 5);
         Position positionMove(position.getRow(), 6);
@@ -53,6 +53,30 @@ set<Move> King::getMoves(const Board& board) const
             moves.insert(move);
         }
     }
+
+    //Queenside CASTLE move
+    if (!isMoved())
+    {
+        Position positionSpace1(position.getRow(), 3);
+        Position positionMove(position.getRow(), 2);
+        Position positionSpace2(position.getRow(), 1);
+        Position positionRook(position.getRow(), 0);
+
+        if ((board[positionMove].getType() == SPACE && board[positionSpace1].getType() == SPACE)
+            && (board[positionRook].getType() == ROOK && board[positionSpace2].getType() == SPACE)
+            && board[positionRook].isMoved() == false)
+        {
+            // add castling to the possible moves
+            Move move;
+            move.setSource(getPosition());
+            move.setDest(positionMove);
+            move.setIsWhite(isWhite());
+            move.setCastle(false);
+            moves.insert(move);
+        }
+    }
+
+    return moves;
 
     /*for (int i = 0; i < 8; i++)
     {

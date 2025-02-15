@@ -30,7 +30,7 @@ public:
 
 
     // Constructor
-    Move() : promote(SPACE), capture(SPACE), isWhite(true) { }
+    Move();
 
     Move(const Move& rhs) : promote(SPACE), capture(SPACE), isWhite(true), moveType(MOVE)
     {
@@ -69,6 +69,18 @@ public:
     const Position getDest() const { return dest; }
 
     void setMoveType(MoveType type) { moveType = type; }
+    void setCastle(bool kingSide) 
+    {
+        if (kingSide) //Checks if the castle is done on the king side (columns 4-7) or queen side (columns 0-3)
+        {
+            setMoveType(CASTLE_KING);
+        }
+        else 
+        {
+            setMoveType(CASTLE_QUEEN);
+        }
+    }
+    void setEnPassant() { setMoveType(ENPASSANT); }
     MoveType getMoveType() const { return moveType; }
     char getMoveTypeChar() const
     {

@@ -19,5 +19,8 @@ using namespace std;
  * MOVE : DEFAULT CONSTRUCTOR
  ***************************************************/
 
+Move::Move() : capture(SPACE) 
+{
 
+}
 

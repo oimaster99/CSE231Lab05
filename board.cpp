@@ -68,15 +68,25 @@ Piece& Board::operator [] (const Position& pos)
  * BOARD : DISPLAY
  *         Display the board
  ***********************************************/
-void Board::display(const Position & posHover, const Position & posSelect) const
+void Board::display(const Position& posHover, const Position& posSelect) const
 {
+    // Draw the board background and hover highlight
     pgout->drawBoard();
     pgout->drawHover(posHover.getLocation());
 
-/*    for (int r = 0; r < 8; r++)
-        for (int c = 0; c < 8; c++)
-            board[r][c]->display(pgout);*/
+    // Draw each piece on the board
+    for (int col = 0; col < 8; col++)
+    {
+        for (int row = 0; row < 8; row++)
+        {
+            if (board[col][row] != nullptr)
+            {
+                board[col][row]->display(pgout);
+            }
+        }
+    }
 }
+
 
 
 /************************************************
@@ -85,8 +95,21 @@ void Board::display(const Position & posHover, const Position & posSelect) const
  ************************************************/
 Board::Board(ogstream* pgout, bool noreset) : pgout(pgout), numMoves(0)
 {
+    // Initialize the board with nullptr
+    for (int col = 0; col < 8; col++)
+    {
+        for (int row = 0; row < 8; row++)
+        {
+            board[col][row] = nullptr;
+        }
+    }
 
+    if (!noreset)
+    {
+        reset();
+    }
 }
+
 
 
 /************************************************
@@ -144,11 +167,33 @@ void Board::move(const Move & move)
  *********************************************/
 BoardEmpty::BoardEmpty() : BoardDummy(), pSpace(nullptr), moveNumber(0)
 {
-   pSpace = new Space(0, 0);
+    // Allocate a dummy piece that represents an empty square
+    pSpace = new PieceDummy();
+
+    // Ensure every cell in the board is initialized to nullptr
+    for (int col = 0; col < 8; col++)
+        for (int row = 0; row < 8; row++)
+            board[col][row] = nullptr;
 }
-BoardEmpty::~BoardEmpty() 
+
+BoardEmpty::~BoardEmpty()
 {
-   delete pSpace;
+    delete pSpace;
+    pSpace = nullptr;
+}
+
+const Piece& BoardEmpty::operator [] (const Position& pos) const
+{
+    assert(pos.isValid());
+    if (board[pos.getCol()][pos.getRow()])
+        return *(board[pos.getCol()][pos.getRow()]);
+    else
+        return *pSpace;
+}
+
+int BoardEmpty::getCurrentMove() const
+{
+    return moveNumber;
 }
 
 BoardDummy::BoardDummy() : Board(nullptr, true)
